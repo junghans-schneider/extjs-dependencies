@@ -14,8 +14,7 @@
   "dependencies": {
     "falafel": "~0.3.1",
     "minimatch": "~0.2.12",
-    "trim": "0.0.1",
-    "array-extended": "0.0.9"
+    "trim": "0.0.1"
   },
   "keywords": [ "extjs", "ext", "sencha", "dependencies", "build", "order" ],
   "license": "MIT",
