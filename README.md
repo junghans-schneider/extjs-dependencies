@@ -22,9 +22,9 @@ Install `extjs-dependencies` in your project:
 Then add it to your build:
 
 ~~~javascript
-var ExtjsDependencies = require('extjs-dependencies');
+var extdeps = require('extjs-dependencies');
 
-var extJsFiles = ExtjsDependencies.resolveFiles({
+var extFiles = extdeps.resolveFiles({
     entry: [ 'ext/ext-dev.js', 'app.js' ],  // Add all entry points to include with dependencies
     resolve: {
         path: {
@@ -34,7 +34,7 @@ var extJsFiles = ExtjsDependencies.resolveFiles({
     }
 });
 
-// extJsFiles = [
+// extFiles = [
 //   'ext/ext-dev.js',
 //   'ext/src/button/Button.js',
 //   ...
@@ -44,15 +44,49 @@ var extJsFiles = ExtjsDependencies.resolveFiles({
 ~~~
 
 
+Gulp example
+------------
+
+The following example shows how to use `extjs-dependencies` with [gulp](http://gulpjs.com/).
+Please note that `extjs-dependencies` doesn't depend on gulp. So you can use it with other build systems, too.
+
+Example `gulpfile.js`:
+
+~~~javascript
+var gulp       = require('gulp');
+var concat     = require('gulp-concat');
+var sourcemaps = require('gulp-sourcemaps');     // Optional
+var extdeps    = require('extjs-dependencies');
+
+gulp.task('scripts', function(){
+    var extFiles = extdeps.resolveFiles({
+        entry: [ 'ext/ext-dev.js', 'app.js' ],
+        resolve: {
+            path: {
+                'Ext':   'ext/src',
+                'myapp': 'app'
+            }
+        }
+    });
+
+    return gulp.src(extFiles)
+        .pipe(sourcemaps.init())       // Optional
+        .pipe(concat('scripts.js'))
+        .pipe(sourcemaps.write('.'))   // Optional
+        .pipe(gulp.dest('build'));
+});
+~~~
+
+
 Using a separate Ext JS script
 ------------------------------
 
 If you prefer to load the Ext JS core using an extra script tag, you can exclude it from your build:
 
 ~~~javascript
-var ExtjsDependencies = require('extjs-dependencies');
+var extdeps = require('extjs-dependencies');
 
-var extJsFiles = ExtjsDependencies.resolveFiles({
+var extFiles = extdeps.resolveFiles({
     provided: 'ext/ext-all-dev.js',       // Add Ext JS scripts you load independently in your html file
     entry: 'app.js',                      // Add all entry points to include with dependencies
     resolve: {
@@ -69,9 +103,9 @@ All options
 -----------
 
 ~~~javascript
-var ExtjsDependencies = require('extjs-dependencies');
+var extdeps = require('extjs-dependencies');
 
-var extJsFiles = ExtjsDependencies.resolveFiles({
+var extFiles = extdeps.resolveFiles({
     encoding: 'utf8',                     // Source file encoding. Default: 'utf8'
     root: 'path/to/project',              // The root of your project. All paths are relative to this.
     provided: [ 'extjs/ext-dev.js' ],     // Add Ext JS scripts you load independently in your html file
