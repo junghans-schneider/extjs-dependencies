@@ -73,7 +73,7 @@ var ExtjsDependencies = require('extjs-dependencies');
 
 var extJsFiles = ExtjsDependencies.resolveFiles({
     encoding: 'utf8',                     // Source file encoding. Default: 'utf8'
-    root: 'path/to/project',              // The root of your project. All paths are relative to this. Default: '.'
+    root: 'path/to/project',              // The root of your project. All paths are relative to this.
     provided: [ 'extjs/ext-dev.js' ],     // Add Ext JS scripts you load independently in your html file
     entry: [ 'app.js' ],                  // Add all entry points to include with dependencies
     resolve: {
@@ -94,7 +94,7 @@ var extJsFiles = ExtjsDependencies.resolveFiles({
         }
     }
     excludeClasses: ['Ext.*', 'MyApp.some.Class'],  // Optional. Classes to exclude
-    skipParse: ['app/ux/SkipMe.js']                 // Optional. Files to exclude (excludes also dependencies)
+    skipParse: ['app/ux/SkipMe.js']                 // Optional. Files to exclude (with dependencies)
 });
 ~~~
 
@@ -127,7 +127,7 @@ extFile.parentName;   // The name of the parent class. May be `null`
 extFile.aliasNames;   // Alias names of other classes (not necessarily defined in this source file)
 extFile.requires;     // Strong dependencies (which must be loaded before this source file)
 extFile.uses;         // Weak dependencies (which can be loaded after this source file)
-extFile.src;          // The optimized source code (with some statements like `require: [ ... ]` removed)
+extFile.src;          // The optimized source code (with some statements like `require` removed)
 extFile.path;         // The path to the source file (relative to `options.root`)
 ~~~
 
