@@ -106,29 +106,49 @@ All options
 var extdeps = require('extjs-dependencies');
 
 var extFiles = extdeps.resolveFiles({
-    encoding: 'utf8',                     // Source file encoding. Default: 'utf8'
-    root: 'path/to/project',              // The root of your project. All paths are relative to this.
-    provided: [ 'extjs/ext-dev.js' ],     // Add Ext JS scripts you load independently in your html file
-    entry: [ 'app.js' ],                  // Add all entry points to include with dependencies
+    // Source file encoding. Default: 'utf8'
+    encoding: 'utf8',
+
+    // The root of your project. All paths are relative to this. Optional, default: '.'
+    root: 'path/to/project',
+
+    // Add Ext JS scripts you load independently in your html file. Optional.
+    provided: [ 'extjs/ext-dev.js' ],
+
+    // Add all entry points to include with dependencies
+    entry: [ 'app.js' ],
+
     resolve: {
-        path: {                           // The source folders for each class name prefix
+        // The source folders for each class name prefix
+        path: {
             'Ext':   'ext/src',
             'myapp': 'app'
         },
-        alias: {                          // Optional. Alternative class names
+
+        // Alternative class names. Optional.
+        alias: {
             'Ext.Layer': 'Ext.dom.Layer'
         }
     },
-    extraDependencies: {                  // Optional
+
+    // Optimize source? (removes some statements like `require`) Optional, default is false.
+    optimizeSource: false,
+
+    // Extra dependencies. Optional.
+    extraDependencies: {
         requires: {
-            'MyClass': 'MyDependency'     // Define extra require-dependencies here
+            'MyClass': 'MyDependency'
         },
         uses: {
-            'MyClass': 'MyDependency'     // Define extra uses-dependencies here
+            'MyClass': 'MyDependency'
         }
     }
-    excludeClasses: ['Ext.*', 'MyApp.some.Class'],  // Optional. Classes to exclude
-    skipParse: ['app/ux/SkipMe.js']                 // Optional. Files to exclude (with dependencies)
+
+    // Classes to exclude. Optional.
+    excludeClasses: ['Ext.*', 'MyApp.some.Class'],
+
+    // Files to exclude (excludes also dependencies). Optional.
+    skipParse: ['app/ux/SkipMe.js']
 });
 ~~~
 
@@ -148,7 +168,7 @@ Resolves and sorts all dependencies of an Ext JS project.
 
 Does the same as `resolveFiles`, but returns an array of `ExtFile` objects holding the parser result for each source file.
 
-**Tip:** You can use the `src` attribute of the `ExtFile` object to create a better optimized build. However this will break source maps.
+**Tip:** If you set `optimizeSource` to `true`, you can use the `src` attribute of the `ExtFile` object to create a better optimized build. However this will break source maps.
 
 **Parameter:** See "All options".  
 **Returns:** A sorted array of `ExtFile` objects with the parser result for each source file.
@@ -161,7 +181,7 @@ extFile.parentName;   // The name of the parent class. May be `null`
 extFile.aliasNames;   // Alias names of other classes (not necessarily defined in this source file)
 extFile.requires;     // Strong dependencies (which must be loaded before this source file)
 extFile.uses;         // Weak dependencies (which can be loaded after this source file)
-extFile.src;          // The optimized source code (with some statements like `require` removed)
+extFile.src;          // The source code (is optimized if `optimizeSource` is `true`)
 extFile.path;         // The path to the source file (relative to `options.root`)
 ~~~
 
@@ -174,7 +194,7 @@ Parses a single source file.
 
   - `src` the source code as string. If you don't have the source loaded, used `parseFile` instead (see below).
   - `filePath` the path to the source file. Should be relative to `options.root`.
-  - `options` See "All options", only the following attributes are used: `excludeClasses`, `skipParse` and `extraDependencies`.
+  - `options` See "All options", only the following attributes are used: `optimizeSource`, `excludeClasses`, `skipParse` and `extraDependencies`.
   
 **Returns:** A `ExtFile` object. See "resolve".
 
@@ -187,7 +207,7 @@ Loads and parses a single source file.
 **Parameters:**
 
   - `filePath` the path to the source file. Should be relative to `options.root`.
-  - `options` See "All options", only the following attributes are used: `excludeClasses`, `skipParse` and `extraDependencies`.
+  - `options` See "All options".
   
 **Returns:** A `ExtFile` object. See "resolve".
 
