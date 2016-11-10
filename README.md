@@ -1,4 +1,4 @@
-extjs-dependencies
+extjs-dependencies [![NPM version][npm-image]][npm-url]
 ==================
 
 Resolves and sorts all dependencies of an Ext JS project so you can build without the sencha tool.
@@ -183,3 +183,7 @@ You can find the original code [in the grunt-extjs-dependencies project](https:/
 
 The original parser has strong dependencies to grunt and others. Since I needed to determine Ext JS dependencies in a
 non-grunt environment, I decided to extract the parser and to remove those dependencies.
+
+
+[npm-url]: https://www.npmjs.com/package/extjs-dependencies
+[npm-image]: https://img.shields.io/npm/v/extjs-dependencies.svg
