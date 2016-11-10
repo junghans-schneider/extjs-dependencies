@@ -17,9 +17,9 @@ function parseFile(filePath, options) {
     return parse(source, filePath, options);
 }
 
-function getClass(filePath) {
+function createDummyExtFile(filePath) {
     var parser = Parser.init(logger);
-    return parser.getClass(filePath);
+    return parser.createDummyExtFile(filePath);
 }
 
 function resolveFiles(options) {
@@ -35,7 +35,7 @@ function resolveFiles(options) {
 module.exports = {
     parse: parse,
     parseFile: parseFile,
-    getClass: getClass,
+    createDummyExtFile: createDummyExtFile,
     resolve: resolver.resolve,
     resolveFiles: resolveFiles
 };
