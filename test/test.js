@@ -179,6 +179,12 @@ describe('Parser', function() {
             assert.equal(null, extFile.parentName);
             assert.deepEqual([ 'A', 'B', 'Ext.app.Application' ], extFile.requires);
             assert.deepEqual([ 'C', 'D' ], extFile.uses);
+            assert.deepEqual({ myapp: 'app' }, extFile.resolvePaths);
+
+            src = "Ext.application({ name: 'myapp', appFolder: 'src/myapp' })";
+            extFile = (new Parser()).parse(src, 'test');
+            assert.deepEqual(['myapp'], extFile.names);
+            assert.deepEqual({ myapp: 'src/myapp' }, extFile.resolvePaths);
         });
 
         it('should detect Ext.require calls', function() {
