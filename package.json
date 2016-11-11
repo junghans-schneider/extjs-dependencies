@@ -17,7 +17,20 @@
     "minimatch": "~0.2.12",
     "trim": "0.0.1"
   },
-  "keywords": [ "extjs", "ext", "sencha", "dependencies", "build", "order" ],
+  "devDependencies": {
+    "mocha": "^3.1.2"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "keywords": [
+    "extjs",
+    "ext",
+    "sencha",
+    "dependencies",
+    "build",
+    "order"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/junghans-schneider/extjs-dependencies/issues"
