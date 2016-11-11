@@ -4,6 +4,24 @@ var assert = require('assert');
 var Parser = require('../lib/parser');
 
 
+function noop() {}
+
+var testLogger = {
+    lastWarn: null,
+
+    write:     noop,
+    writeln:   noop,
+    ok:        noop,
+    warn: function(message) {
+        this.lastWarn = message;
+    },
+    resetWarn: function() {
+        this.lastWarn = null;
+    }
+};
+
+// Assert documentation: https://nodejs.org/api/assert.html
+
 describe('Parser', function() {
     describe('#parse(src,filePath)', function() {
 
@@ -58,12 +76,21 @@ describe('Parser', function() {
             assert.deepEqual([ 'Product', 'User' ], extFile.uses);
 
             // Don't fail if hasMany contains something the parser doesn't understand
+            testLogger.resetWarn();
             src = "Ext.define('MyModel', { extend: 'Ext.data.Model', hasMany: 'unsupported-stuff' })";
-            extFile = (new Parser()).parse(src, 'test');
+            extFile = (new Parser({ logger: testLogger })).parse(src, 'test');
             assert.deepEqual([ 'MyModel' ], extFile.names);
             assert.deepEqual([ 'Ext.data.Model', 'Ext.data.association.HasMany' ], extFile.requires);
             assert.deepEqual([], extFile.uses);
+            assertLastWarnLogIncludes('Expected object or array with property');
         });
 
     });
 });
+
+function assertLastWarnLogIncludes(msgPart) {
+    if (!testLogger.lastWarn || !testLogger.lastWarn.includes(msgPart)) {
+        assert.fail(testLogger.lastWarn, msgPart, 'Expected warn log contains "' + msgPart + '"');
+    }
+}
+
