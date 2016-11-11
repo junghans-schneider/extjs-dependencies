@@ -43,6 +43,21 @@ describe('Parser', function() {
             assert.deepEqual([ 'D', 'E' ], extFile.uses);
         });
 
+        it('should handle odd calls to Ext.define correctly', function() {
+            var src, extFile;
+
+            testLogger.resetWarn();
+            src = "Ext.define('some' + 'fancy' + 'stuff', {})";
+            extFile = (new Parser({ logger: testLogger })).parse(src, 'test');
+            assertLastWarnIncludes('Cannot determine class name in define call');
+
+            // But don't warn for the `Ext.define` call used in the implementation of `Ext.application`
+            testLogger.resetWarn();
+            src = 'Ext.define(config.name + ".$application", {})';
+            extFile = (new Parser({ logger: testLogger })).parse(src, 'test');
+            assertNoWarn();
+        });
+
         it('should detect belongsTo', function() {
             var src, extFile;
 
@@ -82,15 +97,20 @@ describe('Parser', function() {
             assert.deepEqual([ 'MyModel' ], extFile.names);
             assert.deepEqual([ 'Ext.data.Model', 'Ext.data.association.HasMany' ], extFile.requires);
             assert.deepEqual([], extFile.uses);
-            assertLastWarnLogIncludes('Expected object or array with property');
+            assertLastWarnIncludes('Expected object or array with property');
         });
 
     });
 });
 
-function assertLastWarnLogIncludes(msgPart) {
+function assertLastWarnIncludes(msgPart) {
     if (!testLogger.lastWarn || !testLogger.lastWarn.includes(msgPart)) {
         assert.fail(testLogger.lastWarn, msgPart, 'Expected warn log contains "' + msgPart + '"');
     }
 }
 
+function assertNoWarn() {
+    if (testLogger.lastWarn) {
+        assert.fail(testLogger.lastWarn, '', 'Expected no warn log');
+    }
+}
