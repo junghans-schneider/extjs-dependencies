@@ -195,6 +195,14 @@ describe('Parser', function() {
             assert.deepEqual({ Ext: 'path/to/ext/src' }, extFile.resolvePaths);
         });
 
+        it('should detect Ext.Loader.setPath calls', function() {
+            var src, extFile;
+
+            src = "Ext.Loader.setPath('Ext.ux', 'lib/extjs-ux/src'); var bla = 5; Ext.Loader.setPath('Extensible', 'lib/extensible/src');";
+            extFile = (new Parser()).parse(src, 'test');
+            assert.deepEqual({ 'Ext.ux': 'lib/extjs-ux/src', 'Extensible': 'lib/extensible/src' }, extFile.resolvePaths);
+        });
+
         it('should detect Ext.require calls', function() {
             var src, extFile;
 
