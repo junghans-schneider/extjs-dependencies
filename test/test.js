@@ -187,6 +187,14 @@ describe('Parser', function() {
             assert.deepEqual({ myapp: 'src/myapp' }, extFile.resolvePaths);
         });
 
+        it('should detect Ext core path', function() {
+            var src, extFile;
+
+            src = "var Ext = Ext || {};";
+            extFile = (new Parser()).parse(src, 'path/to/ext/ext-dev.js');
+            assert.deepEqual({ Ext: 'path/to/ext/src' }, extFile.resolvePaths);
+        });
+
         it('should detect Ext.require calls', function() {
             var src, extFile;
 

@@ -25,13 +25,7 @@ Then add it to your build:
 var extdeps = require('extjs-dependencies');
 
 var extFiles = extdeps.resolveFiles({
-    entry: [ 'ext/ext-dev.js', 'app.js' ],  // Add all entry points to include with dependencies
-    resolve: {
-        path: {
-            'Ext':   'ext/src',             // Source folder of classes starting with `Ext.`
-            'myapp': 'app'                  // Source folder of classes starting with `myapp.`
-        }
-    }
+    entry: [ 'ext/ext-dev.js', 'app.js' ]  // Add all entry points to include with dependencies
 });
 
 // extFiles = [
@@ -60,13 +54,7 @@ var extdeps    = require('extjs-dependencies');
 
 gulp.task('scripts', function(){
     var extFiles = extdeps.resolveFiles({
-        entry: [ 'ext/ext-dev.js', 'app.js' ],
-        resolve: {
-            path: {
-                'Ext':   'ext/src',
-                'myapp': 'app'
-            }
-        }
+        entry: [ 'ext/ext-dev.js', 'app.js' ]
     });
 
     return gulp.src(extFiles)
@@ -87,14 +75,8 @@ If you prefer to load the Ext JS core using an extra script tag, you can exclude
 var extdeps = require('extjs-dependencies');
 
 var extFiles = extdeps.resolveFiles({
-    provided: 'ext/ext-all-dev.js',       // Add Ext JS scripts you load independently in your html file
-    entry: 'app.js',                      // Add all entry points to include with dependencies
-    resolve: {
-        path: {
-            'Ext':   'ext/src',           // Source folder of classes starting with `Ext.`
-            'myapp': 'app'                // Source folder of classes starting with `myapp.`
-        }
-    }
+    provided: 'ext/ext-all-dev.js',       // Add Ext scripts you load independently in your html file
+    entry: 'app.js'                       // Add all entry points to include with dependencies
 });
 ~~~
 
@@ -124,8 +106,8 @@ var extFiles = extdeps.resolveFiles({
     resolve: {
         // The source folders for each class name prefix
         path: {
-            'Ext':   'ext/src',
-            'myapp': 'app'
+            'Ext':   'ext/src',   // Search classes starting with `Ext.` in `ext/src`
+            'myapp': 'app'        // Search classes starting with `myapp.` in `app`
         },
 
         // Alternative class names. Optional.
