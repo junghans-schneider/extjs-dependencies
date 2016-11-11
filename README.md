@@ -106,10 +106,13 @@ All options
 var extdeps = require('extjs-dependencies');
 
 var extFiles = extdeps.resolveFiles({
-    // Source file encoding. Default: 'utf8'
+    // Log verbose? Optional, default is false.
+    verbose: false,
+
+    // Source file encoding. Optional, default is 'utf8'
     encoding: 'utf8',
 
-    // The root of your project. All paths are relative to this. Optional, default: '.'
+    // The root of your project. All paths are relative to this. Optional, default is '.'
     root: 'path/to/project',
 
     // Add Ext JS scripts you load independently in your html file. Optional.
