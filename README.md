@@ -11,6 +11,9 @@ detection to any build system.
   - Only includes the source files you really need.
   - Sorts your source files in the right order.
 
+**You are using gulp?**  
+Check out [gulp-extjs](https://github.com/junghans-schneider/gulp-extjs) - the gulp plugin based on `extjs-dependencies`.
+
 
 Basic usage
 -----------
@@ -35,34 +38,6 @@ var extFiles = extdeps.resolveFiles({
 //   'app/view/Main.js',
 //   'app.js'
 // ]
-~~~
-
-
-Gulp example
-------------
-
-The following example shows how to use `extjs-dependencies` with [gulp](http://gulpjs.com/).
-Please note that `extjs-dependencies` doesn't depend on gulp. So you can use it with other build systems, too.
-
-Example `gulpfile.js`:
-
-~~~javascript
-var gulp       = require('gulp');
-var concat     = require('gulp-concat');
-var sourcemaps = require('gulp-sourcemaps');     // Optional
-var extdeps    = require('extjs-dependencies');
-
-gulp.task('scripts', function(){
-    var extFiles = extdeps.resolveFiles({
-        entry: [ 'ext/ext-dev.js', 'app.js' ]
-    });
-
-    return gulp.src(extFiles)
-        .pipe(sourcemaps.init())       // Optional
-        .pipe(concat('scripts.js'))
-        .pipe(sourcemaps.write('.'))   // Optional
-        .pipe(gulp.dest('build'));
-});
 ~~~
 
 
@@ -104,7 +79,7 @@ var extFiles = extdeps.resolveFiles({
     entry: [ 'app.js' ],
 
     resolve: {
-        // The source folders for each class name prefix
+        // The source folders for each class name prefix. Optional.
         path: {
             'Ext':   'ext/src',   // Search classes starting with `Ext.` in `ext/src`
             'myapp': 'app'        // Search classes starting with `myapp.` in `app`
