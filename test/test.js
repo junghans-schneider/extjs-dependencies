@@ -1,3 +1,7 @@
+// Mocha test for extjs-dependencies.
+//
+// Copyright (c) 2016 Junghans und Schneider
+
 'use strict';
 
 var assert = require('assert');
