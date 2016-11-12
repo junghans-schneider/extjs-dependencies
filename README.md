@@ -133,7 +133,16 @@ var extFiles = extdeps.resolveFiles({
     excludeClasses: ['Ext.*', 'MyApp.some.Class'],
 
     // Files to exclude (excludes also dependencies). Optional.
-    skipParse: ['app/ux/SkipMe.js']
+    skipParse: ['app/ux/SkipMe.js'],
+
+    // The file provider to use for hooking into file loading. Optional.
+    fileProvider: {
+        // Returns an object representing the content of a file.
+        createFileContent: function(rootPath, filePath, encoding) { ... },
+
+        // Returns the content of a file as string.
+        getContentAsString: function(content) { ... }
+    }
 });
 ~~~
 
@@ -146,17 +155,38 @@ API
 Resolves and sorts all dependencies of an Ext JS project.
 
 **Parameter:** See "All options".  
-**Returns:** A sorted array of paths to the source files.
+**Returns:** A sorted array of paths to the source files (relative to `options.root`).
 
 
 ### resolve(options)
 
-Does the same as `resolveFiles`, but returns an array of `ExtFile` objects holding the parser result for each source file.
+Does the same as `resolveFiles`, but returns an array of objects with information for each source file.
 
 **Tip:** If you set `optimizeSource` to `true`, you can use the `src` attribute of the `ExtFile` object to create a better optimized build. However this will break source maps.
 
 **Parameter:** See "All options".  
-**Returns:** A sorted array of `ExtFile` objects with the parser result for each source file.
+**Returns:** A sorted array of objects with information for each source file.
+
+Attributes of the returned objects:
+
+~~~javascript
+fileInfo.path;    // The path to the source file (relative to `options.root`)
+fileInfo.content; // The raw content of the source file (the optimized source is in extFile)
+fileInfo.extFile; // The parser result. See `parse`.
+~~~
+
+
+### parse(src, filePath, options)
+
+Parses a single source file.
+
+**Parameters:**
+
+  - `src` the source code as string. If you don't have the source loaded, used `parseFile` instead (see below).
+  - `filePath` the path to the source file. Should be relative to `options.root`.
+  - `options` See "All options", only the following attributes are used: `optimizeSource`, `excludeClasses`, `skipParse` and `extraDependencies`.
+  
+**Returns:** A `ExtFile` object.
 
 Attributes of `ExtFile` objects:
 
@@ -171,20 +201,6 @@ extFile.path;         // The path to the source file (relative to `options.root`
 ~~~
 
 
-### parse(src, filePath, options)
-
-Parses a single source file.
-
-**Parameters:**
-
-  - `src` the source code as string. If you don't have the source loaded, used `parseFile` instead (see below).
-  - `filePath` the path to the source file. Should be relative to `options.root`.
-  - `options` See "All options", only the following attributes are used: `optimizeSource`, `excludeClasses`, `skipParse` and `extraDependencies`.
-  
-**Returns:** A `ExtFile` object. See "resolve".
-
-
-
 ### parseFile(filePath, options)
 
 Loads and parses a single source file.
@@ -194,8 +210,7 @@ Loads and parses a single source file.
   - `filePath` the path to the source file. Should be relative to `options.root`.
   - `options` See "All options".
   
-**Returns:** A `ExtFile` object. See "resolve".
-
+**Returns:** A `ExtFile` object. See `parse`.
 
 
 ### createDummyExtFile(filePath)
@@ -211,7 +226,6 @@ Attributes of the dummy `ExtFile` object:
 extFile.names;        // An array holding the `filePath`
 extFile.path;         // The `filePath`
 ~~~
-
 
 
 History
