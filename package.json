@@ -1,7 +1,7 @@
 {
   "name": "extjs-dependencies",
   "version": "1.2.0",
-  "description": "Resolves and sorts all dependencies of an Ext JS project so you can build without the sencha tool",
+  "description": "Resolves and sorts all dependencies of an Ext JS project.",
   "author": {
     "name": "Til Schneider",
     "email": "github@murfman.de"

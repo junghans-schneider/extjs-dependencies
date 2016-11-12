@@ -1,7 +1,7 @@
 extjs-dependencies [![NPM version][npm-image]][npm-url]
 ==================
 
-Resolves and sorts all dependencies of an Ext JS project so you can build without the sencha tool.
+Resolves and sorts all dependencies of an Ext JS project.
 
 **Features:**
 
