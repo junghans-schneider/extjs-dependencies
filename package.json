@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/junghans-schneider/extjs-dependencies.git"
+    "url": "git+https://github.com/ModelTech/extjs-dependencies.git"
   },
   "main": "index.js",
   "dependencies": {
