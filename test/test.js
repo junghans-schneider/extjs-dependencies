@@ -6,6 +6,7 @@
 
 var assert = require('assert');
 var Parser = require('../lib/parser');
+var parserDriver = require('espree');
 
 
 function noop() {}
@@ -183,12 +184,12 @@ describe('Parser', function() {
             assert.equal(null, extFile.parentName);
             assert.deepEqual([ 'A', 'B', 'Ext.app.Application' ], extFile.requires);
             assert.deepEqual([ 'C', 'D' ], extFile.uses);
-            assert.deepEqual({ myapp: 'app' }, extFile.resolvePaths);
+            assert.deepEqual({ myapp: './app' }, extFile.resolvePaths);
 
             src = "Ext.application({ name: 'myapp', appFolder: 'src/myapp' })";
             extFile = (new Parser()).parse(src, 'test');
             assert.deepEqual(['myapp'], extFile.names);
-            assert.deepEqual({ myapp: 'src/myapp' }, extFile.resolvePaths);
+            assert.deepEqual({ myapp: './src/myapp' }, extFile.resolvePaths);
         });
 
         it('should detect Ext core path', function() {
@@ -247,7 +248,12 @@ describe('Parser', function() {
                   "// @require C  \n" +
                   "// @require   D  \n" +
                   "";
-            extFile = (new Parser()).parse(src, 'test');
+            extFile = (new Parser({
+                parserOptions:{
+                    parser: parserDriver
+                }
+            })).parse(src, 'test');
+
             assert.deepEqual([ 'A', 'B' ], extFile.names);
             assert.deepEqual([ 'C', 'D' ], extFile.requires);
         });
