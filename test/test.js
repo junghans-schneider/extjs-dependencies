@@ -6,7 +6,7 @@
 
 var assert = require('assert');
 var Parser = require('../lib/parser');
-var parserDriver = require('espree');
+var espree = require('espree');
 
 
 function noop() {}
@@ -248,14 +248,49 @@ describe('Parser', function() {
                   "// @require C  \n" +
                   "// @require   D  \n" +
                   "";
-            extFile = (new Parser({
-                parserOptions:{
-                    parser: parserDriver
-                }
-            })).parse(src, 'test');
+            extFile = (new Parser()).parse(src, 'test');
 
             assert.deepEqual([ 'A', 'B' ], extFile.names);
             assert.deepEqual([ 'C', 'D' ], extFile.requires);
+        });
+
+        it('should parse ES6', function() {
+            var src, extFile;
+
+            src = "const a = 42\n" +
+                  "Ext.define('MyClass', { extend: 'A', requires: 'B', uses: 'C',\n" +
+                  "    constructor(config) {\n" +
+                  "       const { a, b } = config\n" +
+                  "    }\n" +
+                  "})\n";
+            extFile = (new Parser()).parse(src, 'test');
+
+            assert.deepEqual([ 'MyClass' ], extFile.names);
+            assert.equal('A', extFile.parentName);
+            assert.deepEqual([ 'A', 'B' ], extFile.requires);
+            assert.deepEqual([ 'C' ], extFile.uses);
+        });
+
+        it('should work with parserOptions', function() {
+            var src, extFile;
+
+            src = "async function foo() { return await bar() }" +
+                  "Ext.define('MyClass', { extend: 'A', requires: 'B', uses: 'C',\n" +
+                  "    constructor(config) {\n" +
+                  "       const { a, b } = config\n" +
+                  "    }\n" +
+                  "})\n";
+            extFile = (new Parser({
+                parserOptions: {
+                    parser: espree,
+                    ecmaVersion: 8
+                }
+            })).parse(src, 'test');
+
+            assert.deepEqual([ 'MyClass' ], extFile.names);
+            assert.equal('A', extFile.parentName);
+            assert.deepEqual([ 'A', 'B' ], extFile.requires);
+            assert.deepEqual([ 'C' ], extFile.uses);
         });
 
     });

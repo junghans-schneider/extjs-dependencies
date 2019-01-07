@@ -61,7 +61,7 @@ All options
 
 ~~~javascript
 var extdeps = require('extjs-dependencies');
-var parserDriver = require('espree');
+var espree = require('espree');
 
 var extFiles = extdeps.resolveFiles({
     // Log verbose? Optional, default is false.
@@ -119,12 +119,13 @@ var extFiles = extdeps.resolveFiles({
         // Returns the content of a file as string.
         getContentAsString: function(content) { ... }
     },
+
     // Parser configure options. Optional
-    parserOptions:{
-        // Parser driver. example: acorn or espree
-        parser: parserDriver,
+    parserOptions: {
+        // Parser driver. example: acorn (default) or espree
+        parser: espree,
         // Indicates the ECMAScript version to parse
-        ecmaVersion: 7
+        ecmaVersion: 8
         //More other options see in eslint/espree or acornjs/acorn library
     }
 });
