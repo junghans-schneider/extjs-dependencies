@@ -6,6 +6,7 @@
 
 var assert = require('assert');
 var Parser = require('../lib/parser');
+var resolver = require('../lib/resolver');
 var espree = require('espree');
 
 
@@ -296,7 +297,55 @@ describe('Parser', function() {
     });
 });
 
-function assertLastWarnIncludes(msgPart) {
+describe('Resolver', function () {
+    describe('#resolve({root, entry, resolve})', function () {
+        it('should resolve', function () {
+            var pathToProject = __dirname + '/testproject';
+            var pathToExt = __dirname + '/testproject/extjs/src';
+            var pathToExtCore = __dirname + '/testproject/extjs-core';
+            var resolveOptions = {
+                root: '../',
+                entry: [
+                    pathToExtCore + '/ext-fake.js',
+                    pathToProject + '/app.js'],
+                resolve: {
+                    path: {
+                        myapp: pathToProject + '/app-src',
+                        Ext: [pathToExt, pathToExtCore + '/src'],
+                        'Ext.ClassWithAliasTwo': pathToExt + '/util/ClassWithAliasTwo.js'
+                    },
+                    alias: {
+                        'Ext.ClassWithAlias': 'Ext.util.ClassWithAlias'
+                    }
+                }
+            };
+
+            var extFileInfos = resolver.resolve(resolveOptions);
+            var files = [];
+            extFileInfos.forEach(function (fileInfo) {
+                files.push(fileInfo.path)
+            });
+
+            assert.ok(
+                files[0].endsWith('/extjs-core/ext-fake.js'),
+                'should first ext-fake.js'
+            );
+            assert.ok(
+                files[files.length-1].endsWith('app.js'),
+                'should last ext-fake.js'
+            );
+            assert.ok(files.includes(pathToExt + '/view/View.js'));
+            assert.ok(files.includes(pathToExt + '/util/ClassWithAliasTwo.js'));
+            // Ext.util.*
+            assert.ok(
+                files.includes(pathToExt + '/util/UtilThree.js'),
+                'should resolve Ext.util.*'
+            );
+
+        });
+    });
+});
+    function assertLastWarnIncludes(msgPart) {
     if (!testLogger.lastWarn || !testLogger.lastWarn.includes(msgPart)) {
         assert.fail(testLogger.lastWarn, msgPart, 'Expected warn log contains "' + msgPart + '"');
     }
