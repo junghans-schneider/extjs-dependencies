@@ -15,7 +15,7 @@
     "extend": "^3.0.2",
     "falafel": "^2.1.0",
     "minimatch": "~3.0.4",
-    "trim": "0.0.1"
+    "trim": "0.0.3"
   },
   "devDependencies": {
     "espree": "^5.0.0",
